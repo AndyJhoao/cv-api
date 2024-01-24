@@ -16,9 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from rest_framework.documentation import include_docs_urls
 from restCv import views as restCV
 
 urlpatterns = [
+    path('', restCV.restView.homeApi),
     path('admin/', admin.site.urls),
     path('download/', restCV.restView.downloadCv),
+    path('docs/', include_docs_urls(title='Files Auditor API'))
 ]

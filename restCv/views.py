@@ -2,8 +2,9 @@ from rest_framework import viewsets
 import os
 from django.http import HttpResponse
 from django.conf import settings
+from django.shortcuts import render
+from rest_framework.decorators import api_view
 
-# Create your views here.
 class restView (viewsets.ModelViewSet):
     def downloadCv(request):
         pdf_filename = 'cv-page.pdf'
@@ -13,6 +14,11 @@ class restView (viewsets.ModelViewSet):
             with open(pdf_path, 'rb') as pdf_file:
                 response = HttpResponse(pdf_file.read(), content_type='application/pdf')
                 response['Content-Disposition'] = f'attachment; filename="{pdf_filename}"'
+                response['Access-Control-Expose-Headers'] = 'Content-Disposition'
                 return response
         else:
             return HttpResponse(status=404, content="No existe el archivo PDF 'cv.pdf'")
+        
+    @api_view(['GET'])
+    def homeApi(request):
+        return render(request, 'home.html')
